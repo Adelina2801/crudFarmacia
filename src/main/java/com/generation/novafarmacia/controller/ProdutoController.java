@@ -37,11 +37,12 @@ public class ProdutoController {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
-	@GetMapping
-    public List<Produto> getAllProduto() {
-        return produtoRepository.findAll();
+	  @GetMapping
+	    public ResponseEntity<List<Produto>> getAll(){
+	        return ResponseEntity.ok(produtoRepository.findAll());
+	    }
         
-	}
+	
   
         @GetMapping("/{id}")
         public ResponseEntity<Produto> getById(@PathVariable Long id) {
@@ -50,6 +51,11 @@ public class ProdutoController {
         			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
                
         }   
+        
+        @GetMapping("/nome/{nome}")
+        public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
+            return ResponseEntity.ok(produtoRepository.findAllByNomeContainingIgnoreCase(nome));
+        }
         
         @PostMapping
         public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
